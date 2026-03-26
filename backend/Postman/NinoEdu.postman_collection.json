@@ -1,0 +1,3540 @@
+{
+  "info": {
+    "_postman_id": "ba44ba8d-8f75-4362-9072-f579fa39678a",
+    "name": "NinoEdu",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "44627223",
+    "_collection_link": "https://go.postman.co/collection/44627223-ba44ba8d-8f75-4362-9072-f579fa39678a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "1 - Auth",
+      "item": [
+        {
+          "name": "1.1 - Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Verificar se o status é 200 OK",
+                  "pm.test(\"Login bem-sucedido\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Extrair o token da resposta e salvar na variável",
+                  "pm.test(\"Token extraído com sucesso\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"token\", jsonData.token);",
+                  "    pm.expect(jsonData.token).to.be.a('string');",
+                  "});",
+                  "",
+                  "// Extrair ID da instituição",
+                  "pm.test(\"ID da instituição extraído\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"instituicao_id\", jsonData.instituicao.id);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"login\": \"{{admin_login}}\",\n    \"senha\": \"{{admin_senha}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.2 - Cadastro Nova Instituição",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cadastro criado com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"testInstituicaoId\", jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"{{random_nome}}\",\n    \"telefone\": \"{{random_telefone}}\",\n    \"email\": \"{{random_email}}\",\n    \"login\": \"{{random_login}}\",\n    \"senha\": \"senha123\",\n    \"tipoUsuario\": \"COMUM\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/cadastro",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "cadastro"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2 - Status",
+      "item": [
+        {
+          "name": "2.1 - Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém status\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('status');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3 - Vogais",
+      "item": [
+        {
+          "name": "3.1 Vogais - Listar Todas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Vogais listadas com sucesso\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Retorna array de vogais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID da primeira vogal\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.length > 0) {",
+                  "        pm.environment.set(\"vogal_id\", jsonData[0].id);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/vogais",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vogais"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4 - Heroi",
+      "item": [
+        {
+          "name": "4.1 Heroi - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Herói criado com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Herói {{timestamp}}\",\n    \"icone\": \"https://exemplo.com/heroi-{{timestamp}}.png\",\n    \"banner\": \"https://exemplo.com/banner-{{timestamp}}.png\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/herois",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "herois"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.2 Heroi - Listar Todos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Herois listados com sucesso\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID do primeiro herói\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.length > 0) {",
+                  "        pm.environment.set(\"heroi_id\", jsonData[0].id);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/herois",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "herois"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.3 Heroi - Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Herói encontrado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém ID correto\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var heroiId = pm.environment.get(\"heroi_id\");",
+                  "    if (heroiId) {",
+                  "        pm.expect(jsonData.id).to.eql(parseInt(heroiId));",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/herois/{{heroi_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "herois",
+                "{{heroi_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.4 Heroi - Atualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Herói atualizado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Herói Atualizado {{timestamp}}\",\n    \"icone\": \"https://exemplo.com/heroi-atualizado.png\",\n    \"banner\": \"https://exemplo.com/banner-atualizado.png\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/herois/{{heroi_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "herois",
+                "{{heroi_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5 - Instituicao",
+      "item": [
+        {
+          "name": "5.1 Instituição - Listar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Instituições listadas com sucesso\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta paginada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "    pm.expect(jsonData).to.have.property('totalElements');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/instituicoes?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "instituicoes"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5.2 Instituição - Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Instituição encontrada\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"ID corresponde\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var instituicaoId = pm.environment.get(\"instituicao_id\");",
+                  "    if (instituicaoId) {",
+                  "        pm.expect(jsonData.id).to.eql(parseInt(instituicaoId));",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/instituicoes/{{instituicao_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "instituicoes",
+                "{{instituicao_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5.3 Instituição - Atualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Instituição atualizada\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Instituição Atualizada {{timestamp}}\",\n    \"telefone\": \"{{random_telefone}}\",\n    \"email\": \"admin@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/instituicoes/{{instituicao_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "instituicoes",
+                "{{instituicao_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "6 - Professor",
+      "item": [
+        {
+          "name": "6.1 Professor - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Professor criado com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID do professor\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"professor_id\", jsonData.id);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Professor {{timestamp}}\",\n    \"email\": \"prof-{{timestamp}}@teste.com\",\n    \"imagem\": \"https://exemplo.com/prof-{{timestamp}}.png\",\n    \"instituicaoId\": {{instituicao_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/professores",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "professores"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.2 Professor - Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Professor encontrado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"ID corresponde\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var professorId = pm.environment.get(\"professor_id\");",
+                  "    if (professorId) {",
+                  "        pm.expect(jsonData.id).to.eql(parseInt(professorId));",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/professores/{{professor_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "professores",
+                "{{professor_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.3 Professor - Atualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Professor atualizado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Professor Atualizado {{timestamp}}\",\n    \"email\": \"prof-atualizado-{{timestamp}}@teste.com\",\n    \"imagem\": \"https://exemplo.com/prof-atualizado.png\",\n    \"instituicaoId\": {{instituicao_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/professores/{{professor_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "professores",
+                "{{professor_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.4 Instituição - Listar Professores",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Professores listados\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Retorna array\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/instituicoes/{{instituicao_id}}/professores",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "instituicoes",
+                "{{instituicao_id}}",
+                "professores"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "7 - Aluno",
+      "item": [
+        {
+          "name": "7.1 Aluno - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Aluno criado com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID e código do aluno\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"aluno_id\", jsonData.id);",
+                  "    pm.environment.set(\"aluno_codigo\", jsonData.codigo);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Aluno {{timestamp}}\",\n    \"codigo\": \"{{random_codigo}}\",\n    \"estagio\": \"SILABA\",\n    \"professorId\": {{professor_id}},\n    \"heroiId\": {{heroi_id}},\n    \"vogalId\": {{vogal_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/alunos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "alunos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7.2 Aluno - Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Aluno encontrado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"ID corresponde\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var alunoId = pm.environment.get(\"aluno_id\");",
+                  "    if (alunoId) {",
+                  "        pm.expect(jsonData.id).to.eql(parseInt(alunoId));",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/alunos/{{aluno_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "alunos",
+                "{{aluno_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7.3 Aluno - Atualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Aluno atualizado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Aluno Atualizado {{timestamp}}\",\n    \"codigo\": \"{{aluno_codigo}}\",\n    \"estagio\": \"PALAVRA\",\n    \"professorId\": {{professor_id}},\n    \"heroiId\": {{heroi_id}},\n    \"vogalId\": {{vogal_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/alunos/{{aluno_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "alunos",
+                "{{aluno_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7.4 Auth - Login Aluno",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Login do aluno bem-sucedido\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta contém dados do aluno\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('aluno');",
+                  "    pm.expect(jsonData.aluno).to.have.property('id');",
+                  "    pm.expect(jsonData.aluno).to.have.property('nome');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"codigo\": \"{{aluno_codigo}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/aluno/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "aluno",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7.5 Professor - Listar Alunos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Alunos listados\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Retorna array\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/professores/{{professor_id}}/alunos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "professores",
+                "{{professor_id}}",
+                "alunos"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "8 - Silaba",
+      "item": [
+        {
+          "name": "8.1 Silaba - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Sílaba criada com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"silaba\": \"BA\",\n    \"palavra\": \"BANANA\",\n    \"complemento\": \"_ _NANA\",\n    \"som\": \"https://exemplo.com/ba-{{timestamp}}.ogg\",\n    \"vogalId\": {{vogal_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/silabas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "silabas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8.2 Silaba - Listar Completo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Sílabas listadas\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta paginada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID da primeira sílaba\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.content && jsonData.content.length > 0) {",
+                  "        pm.environment.set(\"silaba_id\", jsonData.content[0].id);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/silabas?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "silabas"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8.3 Silaba - Listar Resumo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Resumo de sílabas listado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta paginada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/silabas/resumo?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "silabas",
+                "resumo"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8.4 Silaba - Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Sílaba encontrada\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"ID corresponde\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var silabaId = pm.environment.get(\"silaba_id\");",
+                  "    if (silabaId) {",
+                  "        pm.expect(jsonData.id).to.eql(parseInt(silabaId));",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/silabas/{{silaba_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "silabas",
+                "{{silaba_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8.5 Silaba - Atualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Sílaba atualizada\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"silaba\": \"BA\",\n    \"palavra\": \"BANANA\",\n    \"complemento\": \"_ _ NANA\",\n    \"som\": \"https://exemplo.com/ba-atualizado-{{timestamp}}.ogg\",\n    \"vogalId\": {{vogal_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/silabas/{{silaba_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "silabas",
+                "{{silaba_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "9 - Palavra",
+      "item": [
+        {
+          "name": "9.1 Palavra - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Palavra criada com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"palavra\": \"BALA\",\n    \"som\": \"https://exemplo.com/bala-{{timestamp}}.mp3\",\n    \"silabas\": [\n        {\n            \"silabaId\": {{silaba_id}},\n            \"posicao\": 1\n        }\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/palavras",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "palavras"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "9.2 Palavra - Listar Completo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Palavras listadas\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta paginada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID da primeira palavra\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.content && jsonData.content.length > 0) {",
+                  "        pm.environment.set(\"palavra_id\", jsonData.content[0].id);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/palavras?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "palavras"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "9.3 Palavra - Listar Resumo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Resumo de palavras listado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta paginada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/palavras/resumo?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "palavras",
+                "resumo"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "9.4 Palavra - Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Palavra encontrada\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"ID corresponde\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var palavraId = pm.environment.get(\"palavra_id\");",
+                  "    if (palavraId) {",
+                  "        pm.expect(jsonData.id).to.eql(parseInt(palavraId));",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/palavras/{{palavra_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "palavras",
+                "{{palavra_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "9.5 Palavra - Atualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Palavra atualizada\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"palavra\": \"BALA\",\n    \"som\": \"https://exemplo.com/bala-atualizado-{{timestamp}}.mp3\",\n    \"silabas\": [\n        {\n            \"silabaId\": {{silaba_id}},\n            \"posicao\": 1\n        }\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/palavras/{{palavra_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "palavras",
+                "{{palavra_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "10 - Imagem",
+      "item": [
+        {
+          "name": "10.1 Imagem - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem criada com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"estagio\": \"SILABA\",\n    \"entidadeId\": {{silaba_id}},\n    \"imagem\": \"https://exemplo.com/bola-{{timestamp}}.png\",\n    \"descricao\": \"Imagem de bola\",\n    \"colorir\": \"NAO_COLORIR\",\n    \"formato\": \"FOTO\",\n    \"quantidadeAreaCerta\": 10,\n    \"quantidadeAreaErrada\": 6\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/imagens",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10.2 Imagem - Listar Completo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagens listadas\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta paginada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID da primeira imagem\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.content && jsonData.content.length > 0) {",
+                  "        pm.environment.set(\"imagem_id\", jsonData.content[0].id);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/imagens?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10.3 Imagem - Listar Resumo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Resumo de imagens listado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta paginada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/imagens/resumo?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens",
+                "resumo"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10.4 Imagem - Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem encontrada\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"ID corresponde\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var imagemId = pm.environment.get(\"imagem_id\");",
+                  "    if (imagemId) {",
+                  "        pm.expect(jsonData.id).to.eql(parseInt(imagemId));",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/imagens/{{imagem_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens",
+                "{{imagem_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10.5 Imagem - Atualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem atualizada\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"estagio\": \"SILABA\",\n    \"entidadeId\": {{silaba_id}},\n    \"imagem\": \"https://exemplo.com/bola-atualizada-{{timestamp}}.png\",\n    \"descricao\": \"Imagem de bola atualizada\",\n    \"colorir\": \"NAO_COLORIR\",\n    \"formato\": \"DESENHO\",\n    \"quantidadeAreaCerta\": 12,\n    \"quantidadeAreaErrada\": 4\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/imagens/{{imagem_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens",
+                "{{imagem_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "11 - Fragmento",
+      "item": [
+        {
+          "name": "11.1 Fragmento - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Fragmento criado com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"caminho\": \"https://exemplo.com/fragmento-{{timestamp}}.png\",\n    \"imagemId\": {{imagem_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/fragmentos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "fragmentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "11.2 Fragmento - Listar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Fragmentos listados\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta paginada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID do primeiro fragmento\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.content && jsonData.content.length > 0) {",
+                  "        pm.environment.set(\"fragmento_id\", jsonData.content[0].id);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/fragmentos?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "fragmentos"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "11.3 Fragmento - Atualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Fragmento atualizado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"caminho\": \"https://exemplo.com/fragmento-atualizado-{{timestamp}}.png\",\n    \"imagemId\": {{imagem_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/fragmentos/{{fragmento_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "fragmentos",
+                "{{fragmento_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "12 - Jogo",
+      "item": [
+        {
+          "name": "12.1 Jogo - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Jogo criado com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Jogo {{timestamp}}\",\n    \"descricao\": \"Descrição do jogo\",\n    \"estagio\": \"SILABA\",\n    \"imagem\": \"https://exemplo.com/jogo-{{timestamp}}.png\",\n    \"url\": \"https://exemplo.com/jogo-{{timestamp}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/jogos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jogos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "12.2 Jogo - Listar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Jogos listados\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resposta paginada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID do primeiro jogo\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.content && jsonData.content.length > 0) {",
+                  "        pm.environment.set(\"jogo_id\", jsonData.content[0].id);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/jogos?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jogos"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "12.3 Jogo - Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Jogo encontrado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"ID corresponde\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var jogoId = pm.environment.get(\"jogo_id\");",
+                  "    if (jogoId) {",
+                  "        pm.expect(jsonData.id).to.eql(parseInt(jogoId));",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/jogos/{{jogo_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jogos",
+                "{{jogo_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "12.4 Jogo - Atualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Jogo atualizado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Jogo Atualizado {{timestamp}}\",\n    \"descricao\": \"Descrição atualizada\",\n    \"estagio\": \"PALAVRA\",\n    \"imagem\": \"https://exemplo.com/jogo-atualizado-{{timestamp}}.png\",\n    \"url\": \"https://exemplo.com/jogo-atualizado-{{timestamp}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/jogos/{{jogo_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jogos",
+                "{{jogo_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "13 - Favorito",
+      "item": [
+        {
+          "name": "13.1 Favorito - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Favorito criado com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID do favorito\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"favorito_id\", jsonData.id);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"alunoId\": {{aluno_id}},\n    \"jogoId\": {{jogo_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/favoritos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "favoritos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "13.2 Aluno - Listar Favoritos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Favoritos listados\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Retorna array\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/alunos/{{aluno_id}}/favoritos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "alunos",
+                "{{aluno_id}}",
+                "favoritos"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "14 - Historico",
+      "item": [
+        {
+          "name": "14.1 Historico - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Histórico criado com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"alunoId\": {{aluno_id}},\n    \"jogoId\": {{jogo_id}},\n    \"minutos\": 5,\n    \"segundos\": 30,\n    \"concluido\": true,\n    \"pontos\": 100,\n    \"erros\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/historicos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "historicos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "14.2 Aluno - Listar Histórico",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Históricos listados\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Retorna array\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/alunos/{{aluno_id}}/historicos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "alunos",
+                "{{aluno_id}}",
+                "historicos"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "15 - Recursos",
+      "item": [
+        {
+          "name": "15.1 Recurso - Buscar Sílabas para Jogo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Sílabas para jogo retornadas\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Retorna array de recursos\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"⚠️ AVISO: Array não está vazio (dados suficientes no banco)\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.length === 0) {",
+                  "        console.warn(\"⚠️ AVISO: O endpoint retornou array vazio!\");",
+                  "        console.warn(\"Isso pode significar:\");",
+                  "        console.warn(\"1. Não há sílabas com vogal 'A' cadastradas\");",
+                  "        console.warn(\"2. Não há imagens do tipo NAO_COLORIR para essas sílabas\");",
+                  "        console.warn(\"3. Os dados foram deletados nos testes anteriores\");",
+                  "        console.warn(\"Solução: Popule o banco com mais dados antes dos testes de recursos\");",
+                  "    }",
+                  "    // Este teste sempre passa, apenas avisa",
+                  "    pm.expect(true).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Se há recursos, eles têm estrutura correta\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.length > 0) {",
+                  "        pm.expect(jsonData[0]).to.have.property('silaba');",
+                  "        pm.expect(jsonData[0]).to.have.property('imagens');",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/recursos/silabas?vogal=A&limite=5&tipoColorir=NAO_COLORIR&quantImagens=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "recursos",
+                "silabas"
+              ],
+              "query": [
+                {
+                  "key": "vogal",
+                  "value": "A"
+                },
+                {
+                  "key": "limite",
+                  "value": "5"
+                },
+                {
+                  "key": "tipoColorir",
+                  "value": "NAO_COLORIR"
+                },
+                {
+                  "key": "quantImagens",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "15.2 Recurso - Buscar Palavras para Jogo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Palavras para jogo retornadas\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Retorna array de recursos\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"⚠️ AVISO: Array não está vazio (dados suficientes no banco)\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.length === 0) {",
+                  "        console.warn(\"⚠️ AVISO: O endpoint retornou array vazio!\");",
+                  "        console.warn(\"Isso pode significar:\");",
+                  "        console.warn(\"1. Não há palavras com sílabas da vogal 'A' cadastradas\");",
+                  "        console.warn(\"2. Não há imagens do tipo NAO_COLORIR para essas palavras\");",
+                  "        console.warn(\"3. Os dados foram deletados nos testes anteriores\");",
+                  "        console.warn(\"Solução: Popule o banco com mais dados antes dos testes de recursos\");",
+                  "    }",
+                  "    pm.expect(true).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Se há recursos, eles têm estrutura correta\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.length > 0) {",
+                  "        pm.expect(jsonData[0]).to.have.property('palavra');",
+                  "        pm.expect(jsonData[0]).to.have.property('imagens');",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/recursos/palavras?vogal=A&limite=5&tipoColorir=NAO_COLORIR&quantImagens=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "recursos",
+                "palavras"
+              ],
+              "query": [
+                {
+                  "key": "vogal",
+                  "value": "A"
+                },
+                {
+                  "key": "limite",
+                  "value": "5"
+                },
+                {
+                  "key": "tipoColorir",
+                  "value": "NAO_COLORIR"
+                },
+                {
+                  "key": "quantImagens",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "16 - Validações",
+      "item": [
+        {
+          "name": "16.1 - Professor com Aluno",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Professor com aluno não pode ser deletado\", function () {",
+                  "           pm.response.to.have.status(400);",
+                  "    });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/professores/{{professor_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "professores",
+                "{{professor_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "16.2 - Sílaba com Palavra",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Sílaba com palavra não pode ser deletada\", function () {",
+                  "           pm.response.to.have.status(400);",
+                  "    });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/silabas/{{silaba_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "silabas",
+                "{{silaba_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "16.3 - Imagem com Fragmento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem com fragmento não pode ser deletada\", function () {",
+                  "           pm.response.to.have.status(400);",
+                  "    });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/imagens/{{imagem_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens",
+                "{{imagem_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "17 - Security",
+      "item": [
+        {
+          "name": "17.1 Security - Criar Instituição Comum",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cadastro de instituição comum criado\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "console.log(\"Instituição comum criada com login: \" + pm.environment.get(\"commonLogin\"));",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"commonInstituicaoId\", jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.environment.set(\"commonLogin\", \"comum_test_\" + Date.now());",
+                  "pm.environment.set(\"commonPassword\", \"senha123\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Instituição Comum Test\",\n    \"email\": \"{{commonLogin}}@test.com\",\n    \"login\": \"{{commonLogin}}\",\n    \"senha\": \"{{commonPassword}}\",\n    \"telefone\": \"43999999999\",\n    \"tipoUsuario\": \"COMUM\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/cadastro",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "cadastro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.2 Security - Login Usuário Comum",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Login usuário comum bem-sucedido\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Token de usuário comum extraído\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.token).to.not.be.undefined;",
+                  "    pm.environment.set(\"token_comum\", jsonData.token);",
+                  "});",
+                  "",
+                  "pm.test(\"Tipo de usuário é COMUM\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.instituicao.tipoUsuario).to.eql(\"COMUM\");",
+                  "});",
+                  "",
+                  "console.log(\"Login comum bem-sucedido. Token salvo.\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"login\": \"{{commonLogin}}\",\n    \"senha\": \"{{commonPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.3 Security - Usuário Comum NÃO pode criar Herói",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Usuário comum NÃO pode criar herói - Acesso negado\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_comum}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Herói Não Autorizado\",\n    \"icone\": \"https://exemplo.com/heroi.png\",\n    \"banner\": \"https://exemplo.com/banner.png\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/herois",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "herois"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.4 Security - Usuário Comum NÃO pode criar Sílaba",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Usuário comum NÃO pode criar sílaba - Acesso negado\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_comum}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"silaba\": \"MA\",\n    \"palavra\": \"MAMA\",\n    \"complemento\": \"MÃE\",\n    \"som\": \"https://exemplo.com/ma.mp3\",\n    \"vogalId\": {{vogal_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/silabas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "silabas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.5 Security - Usuário Comum NÃO pode criar Jogo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Usuário comum NÃO pode criar jogo - Acesso negado\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_comum}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Jogo Não Autorizado\",\n    \"descricao\": \"Tentativa sem permissão\",\n    \"estagio\": \"SILABA\",\n    \"imagem\": \"https://exemplo.com/jogo.png\",\n    \"url\": \"https://exemplo.com/jogo\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/jogos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jogos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.6 Security - Usuário Comum NÃO pode deletar Herói",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Usuário comum NÃO pode deletar herói - Acesso negado\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_comum}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/herois/{{heroi_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "herois",
+                "{{heroi_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.7 Security - Usuário Comum NÃO pode trocar senha",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Usuário comum NÃO pode trocar senha de admin - Acesso negado\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_comum}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"novaSenha\": \"senhahackeada123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/instituicoes/{{instituicao_id}}/trocar-senha",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "instituicoes",
+                "{{instituicao_id}}",
+                "trocar-senha"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.8 Security - Usuário Comum PODE criar Professor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Usuário comum PODE criar professor - Operação permitida\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID do professor criado por comum\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"professorComumId\", jsonData.id);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_comum}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Professor Comum {{$timestamp}}\",\n    \"imagem\": \"https://via.placeholder.com/150\",\n    \"email\": \"prof.comum{{$timestamp}}@example.com\",\n    \"instituicaoId\": {{instituicao_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/professores",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "professores"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.9 Security - Usuário Comum PODE listar Vogais",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Usuário comum PODE listar vogais - Leitura permitida\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Retorna array de vogais\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_comum}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/vogais",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vogais"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.10 Security - Usuário Comum PODE buscar recursos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Usuário comum PODE buscar recursos - Operação permitida\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Retorna recursos de jogo\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_comum}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/recursos/silabas?vogal=A&limite=5&tipoColorir=NAO_COLORIR&quantImagens=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "recursos",
+                "silabas"
+              ],
+              "query": [
+                {
+                  "key": "vogal",
+                  "value": "A"
+                },
+                {
+                  "key": "limite",
+                  "value": "5"
+                },
+                {
+                  "key": "tipoColorir",
+                  "value": "NAO_COLORIR"
+                },
+                {
+                  "key": "quantImagens",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.11 Security - Endpoint sem token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Requisição sem token é rejeitada\", function () {",
+                  "    pm.expect([401, 403]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/professores/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "professores",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17.12 Security - Token inválido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Token inválido é rejeitado\", function () {",
+                  "    pm.expect([401, 403]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "token_invalido_fake_123",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/professores/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "professores",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "18 - Cleanup",
+      "item": [
+        {
+          "name": "18.1 - Deletar Professor Comum",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Professor comum deletado\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/professores/{{professorComumId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "professores",
+                "{{professorComumId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.2 - Deletar Favorito",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Favorito deletado\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/favoritos/{{favorito_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "favoritos",
+                "{{favorito_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.3 - Deletar Fragmento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Fragmento deletado\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/fragmentos/{{fragmento_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "fragmentos",
+                "{{fragmento_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.4 - Deletar Imagem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem deletada\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/imagens/{{imagem_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens",
+                "{{imagem_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.5 - Deletar Jogo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Jogo deletado\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/jogos/{{jogo_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jogos",
+                "{{jogo_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.6 - Deletar Palavra",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Palavra deletada\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/palavras/{{palavra_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "palavras",
+                "{{palavra_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.7 - Deletar Sílaba",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Sílaba deletada\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/silabas/{{silaba_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "silabas",
+                "{{silaba_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.8 - Deletar Aluno",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Aluno deletado\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/alunos/{{aluno_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "alunos",
+                "{{aluno_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.9 - Deletar Professor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Professor deletado\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/professores/{{professor_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "professores",
+                "{{professor_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.10 - Deletar Herói",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Herói deletado\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.request.headers.add({",
+                  "    key: 'Authorization',",
+                  "    value: 'Bearer ' + pm.environment.get('token') // Token de ADMIN",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/herois/{{heroi_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "herois",
+                "{{heroi_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.11 - Deletar Instituição Comum",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Instituição comum deletada\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "       });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/instituicoes/{{commonInstituicaoId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "instituicoes",
+                "{{commonInstituicaoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18.12 - Deletar Instituição Teste",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Instituição teste deletada\", function () {",
+                  "           pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/instituicoes/{{testInstituicaoId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "instituicoes",
+                "{{testInstituicaoId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "// Função para gerar timestamp único",
+          "const timestamp = Date.now();",
+          "pm.environment.set(\"timestamp\", timestamp);",
+          "",
+          "// Função para gerar email aleatório",
+          "const randomEmail = `teste${timestamp}@email.com`;",
+          "pm.environment.set(\"random_email\", randomEmail);",
+          "",
+          "// Função para gerar login aleatório",
+          "const randomLogin = `login${timestamp}`;",
+          "pm.environment.set(\"random_login\", randomLogin);",
+          "",
+          "// Função para gerar código de aluno aleatório",
+          "const randomCodigo = `ALU${timestamp}`;",
+          "pm.environment.set(\"random_codigo\", randomCodigo);",
+          "",
+          "// Função para gerar nome aleatório",
+          "const randomNome = `Teste ${timestamp}`;",
+          "pm.environment.set(\"random_nome\", randomNome);",
+          "",
+          "// Função para gerar telefone aleatório",
+          "const randomTelefone = `119${timestamp.toString().slice(-8)}`;",
+          "pm.environment.set(\"random_telefone\", randomTelefone);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

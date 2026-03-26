@@ -1,0 +1,31 @@
+# Build gerado (será refeito dentro do container)
+target
+
+# IDE
+.idea
+*.iml
+.vscode
+*.swp
+*.swo
+
+# Git
+.git
+.gitignore
+
+# Maven wrapper (não necessário, usamos a imagem maven)
+.mvn
+mvnw
+mvnw.cmd
+
+# Testes e cobertura
+**/test
+coverage
+
+# Postman (coleções de testes, não vai para produção)
+Postman
+
+# Misc
+.DS_Store
+*.md
+*.png
+*.txt

@@ -1,0 +1,49 @@
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: ninoedu-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: NinoEdu
+      POSTGRES_USER: ninoedu
+      POSTGRES_PASSWORD: "ninoedu123"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ninoedu-network
+
+  backend:
+    build:
+      context: ./backend
+    container_name: ninoedu-backend
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      DB_URL: jdbc:postgresql://ninoedu-postgres:5432/NinoEdu
+      DB_USERNAME: ninoedu
+      DB_PASSWORD: "ninoedu123"
+      JWT_SECRET: "ninoedu-jwt-secret-local"
+    ports:
+      - "8080:8080"
+    networks:
+      - ninoedu-network
+
+  nginx:
+    build:
+      context: .     
+      dockerfile: nginx/Dockerfile
+    container_name: ninoedu-nginx
+    restart: unless-stopped
+    ports:
+      - "3100:80"
+    networks:
+      - ninoedu-network
+
+volumes:
+  postgres_data:
+
+networks:
+  ninoedu-network:
+    driver: bridge
