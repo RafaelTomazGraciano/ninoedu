@@ -2,7 +2,10 @@
 
 ## Requisitos
 
-- [Docker](https://www.docker.com/get-started) instalado
+- [Docker](https://www.docker.com/get-started)
+- WSL 
+
+Ao instalar o Docker ele vai pedir para instalar o WSL.
 
 ---
 
@@ -25,6 +28,20 @@ ninoedu/
 ---
 
 ## Como subir o ambiente
+
+Clone o repositório:
+
+```bash
+git clone 
+```
+
+Entre na pasta:
+
+```bash
+cd ninoedu
+```
+
+Rode o comando abaixo para criar os containers no docker:
 
 ```bash
 docker compose up -d --build
