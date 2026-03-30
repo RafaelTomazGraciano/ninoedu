@@ -37,7 +37,7 @@ public class RecursoJogosService {
     public List<RecursoSilabaDTO> buscarSilabasParaJogo(String vogalNome, int limite, TipoColorir tipoColorir,
                                                         int quantImagens) throws BadRequestException {
 
-        List<Long> vogalIds = vogalService.mapearVogaisParaBuscaJogo(vogalNome);
+        List<Long> vogalIds = vogalService.mapearVogalSilabas(vogalNome);
         List<Silaba> silabasFinais = silabaRepository.findRandomByVogalIds(vogalIds, limite);
 
         return silabasFinais.stream().map(silaba -> {
@@ -102,7 +102,7 @@ public class RecursoJogosService {
             throw new BadRequestException("Para o nível de palavras, apenas o tipo NAO_COLORIR é suportado.");
         }
 
-        List<Long> vogalIds = vogalService.mapearVogaisParaBuscaJogo(vogalNome);
+        List<Long> vogalIds = vogalService.mapearVogalPalavras(vogalNome);
         Long vogalAlvoId = vogalService.buscarIdPorNome(vogalNome);
         List<Palavra> palavras = palavraRepository.findRandomByVowelSet(vogalIds, vogalAlvoId, limite);
 

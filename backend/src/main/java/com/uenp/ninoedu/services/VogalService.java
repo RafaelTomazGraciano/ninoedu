@@ -41,7 +41,19 @@ public class VogalService {
     }
 
     @Transactional(readOnly = true)
-    public List<Long> mapearVogaisParaBuscaJogo(String vogalNome) throws BadRequestException {
+    public List<Long> mapearVogalSilabas(String vogalNome) throws BadRequestException {
+        if (vogalNome == null || vogalNome.isBlank()) {
+            throw new BadRequestException("A vogal é obrigatória.");
+        }
+
+        Vogal vogal = vogalRepository.findByVogal(vogalNome.toUpperCase())
+                .orElseThrow(() -> new ResourceNotFoundException("Vogal '" + vogalNome + "' não encontrada."));
+
+        return List.of(vogal.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> mapearVogalPalavras(String vogalNome) throws BadRequestException {
         if (vogalNome == null || vogalNome.isBlank()) {
             throw new BadRequestException("A vogal é obrigatória.");
         }
