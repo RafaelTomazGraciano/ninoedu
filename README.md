@@ -32,7 +32,7 @@ ninoedu/
 Clone o repositório:
 
 ```bash
-git clone 
+git clone https://github.com/RafaelTomazGraciano/ninoedu.git
 ```
 
 Entre na pasta:
