@@ -5,7 +5,13 @@
 - [Docker](https://www.docker.com/get-started)
 - WSL 
 
-Ao instalar o Docker ele vai pedir para instalar o WSL.
+Ao instalar o Docker ele vai abrir um terminal e pedir para instalar o WSL. Porém pode-se instalar o WSL manualmente, seguindo os passos abaixo:
+
+1. Abra o PowerShelle execute o comando:
+
+```bash
+wsl --install
+```
 
 ---
 
@@ -455,4 +461,25 @@ docker compose down
 **Derrubar e apagar os dados do banco (recomeçar do zero):**
 ```bash
 docker compose down -v
+```
+
+---
+
+## PARA AQUELES SEM DOCKER
+
+
+### Requisições de Sílabas
+
+Você deve copiar o código do Godot para o request de sílabas e trocar a url por esta aqui: 
+
+``` gdscript
+var url = "https://unconcludable-prince-aerobically.ngrok-free.dev/api/recursos/silabas?vogal=A&limite=18&tipoColorir=NAO_COLORIR&quantImagens=4"
+```
+
+### Requisiçaõ de Palavras
+
+Você deve copiar o código do Godot para o request de palavras e trocar a url por esta aqui: 
+
+``` gdscript
+var url = "https://unconcludable-prince-aerobically.ngrok-free.dev/api/recursos/palavras?vogal=O&limite=9&tipoColorir=NAO_COLORIR&quantImagens=4"
 ```
