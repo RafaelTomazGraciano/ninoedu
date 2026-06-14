@@ -462,24 +462,3 @@ docker compose down
 ```bash
 docker compose down -v
 ```
-
----
-
-## PARA AQUELES SEM DOCKER
-
-
-### Requisições de Sílabas
-
-Você deve copiar o código do Godot para o request de sílabas e trocar a url por esta aqui: 
-
-``` gdscript
-var url = "https://unconcludable-prince-aerobically.ngrok-free.dev/api/recursos/silabas?vogal=A&limite=18&tipoColorir=NAO_COLORIR&quantImagens=4"
-```
-
-### Requisiçaõ de Palavras
-
-Você deve copiar o código do Godot para o request de palavras e trocar a url por esta aqui: 
-
-``` gdscript
-var url = "https://unconcludable-prince-aerobically.ngrok-free.dev/api/recursos/palavras?vogal=O&limite=9&tipoColorir=NAO_COLORIR&quantImagens=4"
-```
