@@ -1,6 +1,5 @@
 package com.uenp.ninoedu.model.entity;
 
-import com.uenp.ninoedu.model.enums.Estagio;
 import com.uenp.ninoedu.model.enums.FormatoImagem;
 import com.uenp.ninoedu.model.enums.TipoColorir;
 import jakarta.persistence.*;
@@ -9,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,17 +17,20 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "imagem")
 @SQLDelete(sql = "UPDATE imagem SET deletado = true WHERE id = ?")
-@Where(clause = "deletado = false")
+@SQLRestriction("deletado = false")
 public class Imagem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Estagio estagio;
+    @ManyToOne
+    @JoinColumn(name = "silaba_id")
+    private Silaba silaba;
 
-    @Column(name = "entidade_id", nullable = false)
-    private Long entidadeId;
+    @ManyToOne
+    @JoinColumn(name = "palavra_id")
+    private Palavra palavra;
 
     private String imagem;
 

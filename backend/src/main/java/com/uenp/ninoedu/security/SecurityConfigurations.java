@@ -41,6 +41,7 @@ public class SecurityConfigurations {
 //                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/api/auth/aluno/login").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/api/status").permitAll()
+//                        .requestMatchers("/error").permitAll()
 //
 //                        // ========== ENDPOINTS APENAS ADMIN ==========
 //                        .requestMatchers(HttpMethod.POST, "/api/auth/cadastro").hasRole("ADMIN")
@@ -51,18 +52,18 @@ public class SecurityConfigurations {
 //                                "/api/imagens", "/api/fragmentos", "/api/cenas").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.PUT,
 //                                "/api/jogos/**", "/api/herois/**", "/api/silabas/**", "/api/palavras/**",
-//                                "/api/imagens/**", "/api/fragmentos/**", "/api/cenas").hasRole("ADMIN")
+//                                "/api/imagens/**", "/api/fragmentos/**", "/api/cenas/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.DELETE,
 //                                "/api/jogos/**", "/api/herois/**", "/api/silabas/**", "/api/palavras/**",
-//                                "/api/imagens/**", "/api/fragmentos/**", "/api/cenas").hasRole("ADMIN")
+//                                "/api/imagens/**", "/api/fragmentos/**", "/api/cenas/**").hasRole("ADMIN")
 //
 //                        // Gerenciar Instituições (ADMIN)
 //                        .requestMatchers(HttpMethod.POST, "/api/instituicoes").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.PUT, "/api/instituicoes/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.DELETE, "/api/instituicoes/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.PATCH, "/api/instituicoes/**").hasRole("ADMIN")
-//
-//                        // ========== REGRA FINAL / ADMIN E COMUM PODEM ACESSAR ==========
+
+                        // ========== REGRA FINAL / ADMIN E COMUM PODEM ACESSAR ==========
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

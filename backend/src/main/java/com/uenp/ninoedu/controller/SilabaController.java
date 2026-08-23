@@ -38,9 +38,9 @@ public class SilabaController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> criarSilaba(@Valid @RequestBody SilabaRequestDTO dto){
+    public ResponseEntity<SilabaResponseDTO> criarSilaba(@Valid @RequestBody SilabaRequestDTO dto){
         SilabaResponseDTO response = silabaService.criarSilaba(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
@@ -49,9 +49,9 @@ public class SilabaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizaSilaba(@PathVariable Long id, @Valid @RequestBody SilabaRequestDTO dto){
-        silabaService.atualizarSilaba(id, dto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<SilabaResponseDTO> atualizaSilaba(@PathVariable Long id, @Valid @RequestBody SilabaRequestDTO dto){
+        SilabaResponseDTO response = silabaService.atualizarSilaba(id, dto);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")

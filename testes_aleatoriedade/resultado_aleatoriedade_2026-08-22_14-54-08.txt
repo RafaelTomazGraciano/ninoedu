@@ -1,0 +1,416 @@
+======================================================================
+  ANALISE DE ALEATORIEDADE - NinoEdu API
+  Data/hora : 22/08/2026, 14:54:08
+  Rodadas   : 200 por categoria
+  Execucoes : 3 por rodada (4 itens cada)
+  Total de sorteios por categoria: 2400
+======================================================================
+
+######################################################################
+  CATEGORIA: Silabas - Vogal A
+  URL: http://localhost:8080/api/recursos/silabas?vogal=A&limite=4&tipoColorir=NAO_COLORIR&quantImagens=2
+  Pool total: 18 itens | Execucoes por rodada: 3 | Rodadas: 200
+######################################################################
+
+======================================================================
+  DIVERSIDADE POR RODADA - Silabas - Vogal A
+======================================================================
+
+  Criterio: em cada bloco de 3 execucoes (12 itens),
+  pelo menos 6 itens (50%) devem ser distintos.
+
+  Formula:
+                    itens distintos na rodada
+    Diversidade = ---------------------------
+                       total de sorteios
+
+  Onde: total de sorteios por rodada = 3 x 4 = 12
+
+  Exemplo (primeiras 5 rodadas):
+    Rodada 1: 8 distintos / 12 sorteios = 66.7% -> PASSOU
+    Rodada 2: 9 distintos / 12 sorteios = 75.0% -> PASSOU
+    Rodada 3: 10 distintos / 12 sorteios = 83.3% -> PASSOU
+    Rodada 4: 10 distintos / 12 sorteios = 83.3% -> PASSOU
+    Rodada 5: 11 distintos / 12 sorteios = 91.7% -> PASSOU
+
+  Resumo geral (200 rodadas):
+    Rodadas que passaram : 200 de 200
+    Taxa de aprovacao    : 100.00%
+    Media de distintos   : 9.47 por rodada
+
+  Resultado: 100.00% das rodadas satisfizeram o criterio de diversidade.
+
+======================================================================
+  TAXA DE COBERTURA - Silabas - Vogal A
+======================================================================
+
+  Formula:
+         |D|
+    C = -----
+         |P|
+
+  Onde:
+    |D| = itens distintos observados = 18
+    |P| = total de itens no banco    = 18
+
+  Resolucao:
+         18
+    C = ----- = 1.0000 = 100.00%
+         18
+
+  Itens distintos observados: A, BA, CA, DA, FA, GA, JA, LA, MA, NA, PA, QUA, RA, SA, TA, VA, XA, ZA
+
+  Resultado: Cobertura de 100.00% do pool (18 de 18 itens apareceram)
+
+======================================================================
+  TESTE QUI-QUADRADO DE ADERENCIA - Silabas - Vogal A
+======================================================================
+
+  Hipotese nula (H0):
+    Todos os itens tem igual probabilidade de ser sorteados.
+
+  Formula:
+              (Oi - Ei)^2
+    X^2 = S  ------------
+                  Ei
+
+  Onde:
+    Oi  = frequencia observada de cada item
+    Ei  = frequencia esperada = total de sorteios / pool
+        = 2400 / 18 = 133.3333
+    S   = somatorio sobre todos os 18 itens do pool
+    gl  = graus de liberdade = pool - 1 = 18 - 1 = 17
+    X^2 critico (alfa = 0.05, gl = 17) = 27.587
+
+  Resolucao - frequencia de cada item:
+  Item                 Observado (Oi)     Esperado (Ei)      (Oi-Ei)^2/Ei
+  --------------------------------------------------------------------
+  A                    119                133.3333           1.5408
+  BA                   130                133.3333           0.0833
+  CA                   140                133.3333           0.3333
+  DA                   130                133.3333           0.0833
+  FA                   143                133.3333           0.7008
+  GA                   136                133.3333           0.0533
+  JA                   129                133.3333           0.1408
+  LA                   137                133.3333           0.1008
+  MA                   134                133.3333           0.0033
+  NA                   138                133.3333           0.1633
+  PA                   124                133.3333           0.6533
+  QUA                  139                133.3333           0.2408
+  RA                   145                133.3333           1.0208
+  SA                   123                133.3333           0.8008
+  TA                   128                133.3333           0.2133
+  VA                   121                133.3333           1.1408
+  XA                   138                133.3333           0.1633
+  ZA                   146                133.3333           1.2033
+  --------------------------------------------------------------------
+
+  X^2 calculado = 8.6400
+  X^2 critico   = 27.587 (alfa = 0.05, gl = 17)
+
+  Resultado: X^2 calculado (8.6400) <= X^2 critico (27.587)
+  Nao se rejeita H0 - distribuicao compativel com uniformidade.
+
+######################################################################
+  CATEGORIA: Silabas - Vogal O
+  URL: http://localhost:8080/api/recursos/silabas?vogal=O&limite=4&tipoColorir=NAO_COLORIR&quantImagens=2
+  Pool total: 18 itens | Execucoes por rodada: 3 | Rodadas: 200
+######################################################################
+
+======================================================================
+  DIVERSIDADE POR RODADA - Silabas - Vogal O
+======================================================================
+
+  Criterio: em cada bloco de 3 execucoes (12 itens),
+  pelo menos 6 itens (50%) devem ser distintos.
+
+  Formula:
+                    itens distintos na rodada
+    Diversidade = ---------------------------
+                       total de sorteios
+
+  Onde: total de sorteios por rodada = 3 x 4 = 12
+
+  Exemplo (primeiras 5 rodadas):
+    Rodada 1: 8 distintos / 12 sorteios = 66.7% -> PASSOU
+    Rodada 2: 10 distintos / 12 sorteios = 83.3% -> PASSOU
+    Rodada 3: 9 distintos / 12 sorteios = 75.0% -> PASSOU
+    Rodada 4: 10 distintos / 12 sorteios = 83.3% -> PASSOU
+    Rodada 5: 9 distintos / 12 sorteios = 75.0% -> PASSOU
+
+  Resumo geral (200 rodadas):
+    Rodadas que passaram : 200 de 200
+    Taxa de aprovacao    : 100.00%
+    Media de distintos   : 9.61 por rodada
+
+  Resultado: 100.00% das rodadas satisfizeram o criterio de diversidade.
+
+======================================================================
+  TAXA DE COBERTURA - Silabas - Vogal O
+======================================================================
+
+  Formula:
+         |D|
+    C = -----
+         |P|
+
+  Onde:
+    |D| = itens distintos observados = 18
+    |P| = total de itens no banco    = 18
+
+  Resolucao:
+         18
+    C = ----- = 1.0000 = 100.00%
+         18
+
+  Itens distintos observados: BO, CO, DO, FO, GO, JO, LO, MO, NO, O, PO, QUO, RO, SO, TO, VO, XO, ZO
+
+  Resultado: Cobertura de 100.00% do pool (18 de 18 itens apareceram)
+
+======================================================================
+  TESTE QUI-QUADRADO DE ADERENCIA - Silabas - Vogal O
+======================================================================
+
+  Hipotese nula (H0):
+    Todos os itens tem igual probabilidade de ser sorteados.
+
+  Formula:
+              (Oi - Ei)^2
+    X^2 = S  ------------
+                  Ei
+
+  Onde:
+    Oi  = frequencia observada de cada item
+    Ei  = frequencia esperada = total de sorteios / pool
+        = 2400 / 18 = 133.3333
+    S   = somatorio sobre todos os 18 itens do pool
+    gl  = graus de liberdade = pool - 1 = 18 - 1 = 17
+    X^2 critico (alfa = 0.05, gl = 17) = 27.587
+
+  Resolucao - frequencia de cada item:
+  Item                 Observado (Oi)     Esperado (Ei)      (Oi-Ei)^2/Ei
+  --------------------------------------------------------------------
+  BO                   136                133.3333           0.0533
+  CO                   134                133.3333           0.0033
+  DO                   127                133.3333           0.3008
+  FO                   138                133.3333           0.1633
+  GO                   123                133.3333           0.8008
+  JO                   134                133.3333           0.0033
+  LO                   116                133.3333           2.2533
+  MO                   141                133.3333           0.4408
+  NO                   121                133.3333           1.1408
+  O                    125                133.3333           0.5208
+  PO                   136                133.3333           0.0533
+  QUO                  147                133.3333           1.4008
+  RO                   133                133.3333           0.0008
+  SO                   134                133.3333           0.0033
+  TO                   134                133.3333           0.0033
+  VO                   155                133.3333           3.5208
+  XO                   129                133.3333           0.1408
+  ZO                   137                133.3333           0.1008
+  --------------------------------------------------------------------
+
+  X^2 calculado = 10.9050
+  X^2 critico   = 27.587 (alfa = 0.05, gl = 17)
+
+  Resultado: X^2 calculado (10.9050) <= X^2 critico (27.587)
+  Nao se rejeita H0 - distribuicao compativel com uniformidade.
+
+######################################################################
+  CATEGORIA: Palavras - Vogal A
+  URL: http://localhost:8080/api/recursos/palavras?vogal=A&limite=4&tipoColorir=NAO_COLORIR&quantImagens=2
+  Pool total: 10 itens | Execucoes por rodada: 3 | Rodadas: 200
+######################################################################
+
+======================================================================
+  DIVERSIDADE POR RODADA - Palavras - Vogal A
+======================================================================
+
+  Criterio: em cada bloco de 3 execucoes (12 itens),
+  pelo menos 6 itens (50%) devem ser distintos.
+
+  Formula:
+                    itens distintos na rodada
+    Diversidade = ---------------------------
+                       total de sorteios
+
+  Onde: total de sorteios por rodada = 3 x 4 = 12
+
+  Exemplo (primeiras 5 rodadas):
+    Rodada 1: 7 distintos / 12 sorteios = 58.3% -> PASSOU
+    Rodada 2: 8 distintos / 12 sorteios = 66.7% -> PASSOU
+    Rodada 3: 9 distintos / 12 sorteios = 75.0% -> PASSOU
+    Rodada 4: 9 distintos / 12 sorteios = 75.0% -> PASSOU
+    Rodada 5: 8 distintos / 12 sorteios = 66.7% -> PASSOU
+
+  Resumo geral (200 rodadas):
+    Rodadas que passaram : 199 de 200
+    Taxa de aprovacao    : 99.50%
+    Media de distintos   : 7.82 por rodada
+
+  Resultado: 99.50% das rodadas satisfizeram o criterio de diversidade.
+
+======================================================================
+  TAXA DE COBERTURA - Palavras - Vogal A
+======================================================================
+
+  Formula:
+         |D|
+    C = -----
+         |P|
+
+  Onde:
+    |D| = itens distintos observados = 10
+    |P| = total de itens no banco    = 10
+
+  Resolucao:
+         10
+    C = ----- = 1.0000 = 100.00%
+         10
+
+  Itens distintos observados: ARARA, BALA, BANANA, BATATA, CAMA, FACA, LATA, MALA, SALADA, VACA
+
+  Resultado: Cobertura de 100.00% do pool (10 de 10 itens apareceram)
+
+======================================================================
+  TESTE QUI-QUADRADO DE ADERENCIA - Palavras - Vogal A
+======================================================================
+
+  Hipotese nula (H0):
+    Todos os itens tem igual probabilidade de ser sorteados.
+
+  Formula:
+              (Oi - Ei)^2
+    X^2 = S  ------------
+                  Ei
+
+  Onde:
+    Oi  = frequencia observada de cada item
+    Ei  = frequencia esperada = total de sorteios / pool
+        = 2400 / 10 = 240.0000
+    S   = somatorio sobre todos os 10 itens do pool
+    gl  = graus de liberdade = pool - 1 = 10 - 1 = 9
+    X^2 critico (alfa = 0.05, gl = 9) = 16.919
+
+  Resolucao - frequencia de cada item:
+  Item                 Observado (Oi)     Esperado (Ei)      (Oi-Ei)^2/Ei
+  --------------------------------------------------------------------
+  ARARA                234                240.0000           0.1500
+  BALA                 252                240.0000           0.6000
+  BANANA               235                240.0000           0.1042
+  BATATA               231                240.0000           0.3375
+  CAMA                 234                240.0000           0.1500
+  FACA                 241                240.0000           0.0042
+  LATA                 237                240.0000           0.0375
+  MALA                 259                240.0000           1.5042
+  SALADA               229                240.0000           0.5042
+  VACA                 248                240.0000           0.2667
+  --------------------------------------------------------------------
+
+  X^2 calculado = 3.6583
+  X^2 critico   = 16.919 (alfa = 0.05, gl = 9)
+
+  Resultado: X^2 calculado (3.6583) <= X^2 critico (16.919)
+  Nao se rejeita H0 - distribuicao compativel com uniformidade.
+
+######################################################################
+  CATEGORIA: Palavras - Vogal O
+  URL: http://localhost:8080/api/recursos/palavras?vogal=O&limite=4&tipoColorir=NAO_COLORIR&quantImagens=2
+  Pool total: 9 itens | Execucoes por rodada: 3 | Rodadas: 200
+######################################################################
+
+======================================================================
+  DIVERSIDADE POR RODADA - Palavras - Vogal O
+======================================================================
+
+  Criterio: em cada bloco de 3 execucoes (12 itens),
+  pelo menos 6 itens (50%) devem ser distintos.
+
+  Formula:
+                    itens distintos na rodada
+    Diversidade = ---------------------------
+                       total de sorteios
+
+  Onde: total de sorteios por rodada = 3 x 4 = 12
+
+  Exemplo (primeiras 5 rodadas):
+    Rodada 1: 7 distintos / 12 sorteios = 58.3% -> PASSOU
+    Rodada 2: 7 distintos / 12 sorteios = 58.3% -> PASSOU
+    Rodada 3: 7 distintos / 12 sorteios = 58.3% -> PASSOU
+    Rodada 4: 7 distintos / 12 sorteios = 58.3% -> PASSOU
+    Rodada 5: 6 distintos / 12 sorteios = 50.0% -> PASSOU
+
+  Resumo geral (200 rodadas):
+    Rodadas que passaram : 196 de 200
+    Taxa de aprovacao    : 98.00%
+    Media de distintos   : 7.47 por rodada
+
+  Resultado: 98.00% das rodadas satisfizeram o criterio de diversidade.
+
+======================================================================
+  TAXA DE COBERTURA - Palavras - Vogal O
+======================================================================
+
+  Formula:
+         |D|
+    C = -----
+         |P|
+
+  Onde:
+    |D| = itens distintos observados = 9
+    |P| = total de itens no banco    = 9
+
+  Resolucao:
+         9
+    C = ----- = 1.0000 = 100.00%
+         9
+
+  Itens distintos observados: BOLA, BOLO, CAVALO, COCO, COPO, GATO, MACACO, MOTO, OVO
+
+  Resultado: Cobertura de 100.00% do pool (9 de 9 itens apareceram)
+
+======================================================================
+  TESTE QUI-QUADRADO DE ADERENCIA - Palavras - Vogal O
+======================================================================
+
+  Hipotese nula (H0):
+    Todos os itens tem igual probabilidade de ser sorteados.
+
+  Formula:
+              (Oi - Ei)^2
+    X^2 = S  ------------
+                  Ei
+
+  Onde:
+    Oi  = frequencia observada de cada item
+    Ei  = frequencia esperada = total de sorteios / pool
+        = 2400 / 9 = 266.6667
+    S   = somatorio sobre todos os 9 itens do pool
+    gl  = graus de liberdade = pool - 1 = 9 - 1 = 8
+    X^2 critico (alfa = 0.05, gl = 8) = 15.507
+
+  Resolucao - frequencia de cada item:
+  Item                 Observado (Oi)     Esperado (Ei)      (Oi-Ei)^2/Ei
+  --------------------------------------------------------------------
+  BOLA                 287                266.6667           1.5504
+  BOLO                 268                266.6667           0.0067
+  CAVALO               250                266.6667           1.0417
+  COCO                 270                266.6667           0.0417
+  COPO                 257                266.6667           0.3504
+  GATO                 259                266.6667           0.2204
+  MACACO               254                266.6667           0.6017
+  MOTO                 273                266.6667           0.1504
+  OVO                  282                266.6667           0.8817
+  --------------------------------------------------------------------
+
+  X^2 calculado = 4.8450
+  X^2 critico   = 15.507 (alfa = 0.05, gl = 8)
+
+  Resultado: X^2 calculado (4.8450) <= X^2 critico (15.507)
+  Nao se rejeita H0 - distribuicao compativel com uniformidade.
+
+======================================================================
+  RESUMO GERAL
+======================================================================
+  Analise concluida em 137.3s
+======================================================================

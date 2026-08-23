@@ -47,6 +47,8 @@ public class RecursoJogosService {
             List<RecursoSilabaDTO.ImagemSimplesDTO> imagensSimples = null;
 
             if (tipoColorir == TipoColorir.CLIQUE_COLORIR) {
+                // Nota: a tabela 'cena' não faz parte desta migração e continua com o
+                // padrão antigo entidade_id + estagio.
                 List<Cena> cenasEntity = cenaRepository.findByEntidadeIdAndEstagio(silaba.getId(), Estagio.SILABA);
 
                 cenas = cenasEntity.stream().map(cena -> {
@@ -72,7 +74,7 @@ public class RecursoJogosService {
 
             } else {
                 List<ImagemResponseDTO> imagensDTO = imagemService.buscarImagensParaJogo(
-                        Estagio.SILABA, silaba.getId(), tipoColorir, quantImagens);
+                        silaba.getId(), tipoColorir, quantImagens);
 
                 imagensSimples = imagensDTO.stream()
                         .map(img -> {
@@ -109,8 +111,8 @@ public class RecursoJogosService {
         return palavras.stream().map(palavra -> {
 
             // Busca as imagens da palavra
-            List<Imagem> imagens = imagemRepository.findByEstagioAndEntidadeIdAndColorirAndDeletadoFalse(
-                    Estagio.PALAVRA, palavra.getId(), TipoColorir.NAO_COLORIR);
+            List<Imagem> imagens = imagemRepository.findByPalavraIdAndColorir(
+                    palavra.getId(), TipoColorir.NAO_COLORIR);
 
             Collections.shuffle(imagens);
             List<RecursoPalavraDTO.ImagemPalavraDTO> imagensDTO = imagens.stream()

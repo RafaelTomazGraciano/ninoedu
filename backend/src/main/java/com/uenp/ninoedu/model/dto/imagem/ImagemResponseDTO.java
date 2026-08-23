@@ -1,7 +1,6 @@
 package com.uenp.ninoedu.model.dto.imagem;
 
 import com.uenp.ninoedu.model.dto.fragmento.FragmentoResponseDTO;
-import com.uenp.ninoedu.model.enums.Estagio;
 import com.uenp.ninoedu.model.enums.FormatoImagem;
 import com.uenp.ninoedu.model.enums.TipoColorir;
 
@@ -9,8 +8,8 @@ import java.util.List;
 
 public record ImagemResponseDTO(
         Long id,
-        Estagio estagio,
-        Long entidadeId,
+        Long silabaId,
+        Long palavraId,
         String imagem,
         String mascara,
         String descricao,

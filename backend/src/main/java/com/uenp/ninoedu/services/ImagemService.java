@@ -8,11 +8,14 @@ import com.uenp.ninoedu.model.dto.imagem.ImagemResponseDTO;
 import com.uenp.ninoedu.model.dto.imagem.ImagemResumoDTO;
 import com.uenp.ninoedu.model.entity.Fragmento;
 import com.uenp.ninoedu.model.entity.Imagem;
-import com.uenp.ninoedu.model.enums.Estagio;
+import com.uenp.ninoedu.model.entity.Palavra;
+import com.uenp.ninoedu.model.entity.Silaba;
 import com.uenp.ninoedu.model.enums.TipoColorir;
 import com.uenp.ninoedu.repository.CenaRepository;
 import com.uenp.ninoedu.repository.FragmentoRepository;
 import com.uenp.ninoedu.repository.ImagemRepository;
+import com.uenp.ninoedu.repository.PalavraRepository;
+import com.uenp.ninoedu.repository.SilabaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,13 +33,17 @@ public class ImagemService {
     private final ImagemRepository imagemRepository;
     private final FragmentoRepository fragmentoRepository;
     private final CenaRepository cenaRepository;
+    private final SilabaRepository silabaRepository;
+    private final PalavraRepository palavraRepository;
 
     @Transactional(readOnly = true)
-    public Page<ImagemResponseDTO> listarImagens(Estagio estagio, Long entidadeId, Pageable pageable) {
+    public Page<ImagemResponseDTO> listarImagens(Long silabaId, Long palavraId, Pageable pageable) {
         Page<Imagem> paginaImagens;
 
-        if (estagio != null && entidadeId != null) {
-            paginaImagens = imagemRepository.findByEstagioAndEntidadeId(estagio, entidadeId, pageable);
+        if (silabaId != null) {
+            paginaImagens = imagemRepository.findBySilabaId(silabaId, pageable);
+        } else if (palavraId != null) {
+            paginaImagens = imagemRepository.findByPalavraId(palavraId, pageable);
         } else {
             paginaImagens = imagemRepository.findAll(pageable);
         }
@@ -45,11 +52,13 @@ public class ImagemService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ImagemResumoDTO> listarResumoImagens(Estagio estagio, Long entidadeId, Pageable pageable) {
+    public Page<ImagemResumoDTO> listarResumoImagens(Long silabaId, Long palavraId, Pageable pageable) {
         Page<Imagem> paginaImagens;
 
-        if (estagio != null && entidadeId != null) {
-            paginaImagens = imagemRepository.findByEstagioAndEntidadeId(estagio, entidadeId, pageable);
+        if (silabaId != null) {
+            paginaImagens = imagemRepository.findBySilabaId(silabaId, pageable);
+        } else if (palavraId != null) {
+            paginaImagens = imagemRepository.findByPalavraId(palavraId, pageable);
         } else {
             paginaImagens = imagemRepository.findAll(pageable);
         }
@@ -72,9 +81,8 @@ public class ImagemService {
     public ImagemResponseDTO criarImagem(ImagemRequestDTO dto) {
         Imagem novaImagem = new Imagem();
 
-        // Preenche a entidade com os dados do DTO
-        novaImagem.setEstagio(dto.estagio()); // Corrigido
-        novaImagem.setEntidadeId(dto.entidadeId());
+        aplicarEntidadeVinculada(novaImagem, dto.silabaId(), dto.palavraId());
+
         novaImagem.setImagem(dto.imagem());
         novaImagem.setMascara(dto.mascara());
         novaImagem.setDescricao(dto.descricao());
@@ -97,8 +105,8 @@ public class ImagemService {
         Imagem imagemExistente = imagemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Imagem não encontrada com o ID: " + id));
 
-        imagemExistente.setEstagio(dto.estagio());
-        imagemExistente.setEntidadeId(dto.entidadeId());
+        aplicarEntidadeVinculada(imagemExistente, dto.silabaId(), dto.palavraId());
+
         imagemExistente.setImagem(dto.imagem());
         imagemExistente.setMascara(dto.mascara());
         imagemExistente.setDescricao(dto.descricao());
@@ -137,11 +145,10 @@ public class ImagemService {
     }
 
     @Transactional(readOnly = true)
-    public List<ImagemResponseDTO> buscarImagensParaJogo(Estagio estagio, Long entidadeId, TipoColorir tipoColorir, int quantImagens) {
+    public List<ImagemResponseDTO> buscarImagensParaJogo(Long silabaId, TipoColorir tipoColorir, int quantImagens) {
 
         // Busca todas as imagens que batem com o critério
-        List<Imagem> imagens = imagemRepository.findByEstagioAndEntidadeIdAndColorir(estagio, entidadeId, tipoColorir);
-
+        List<Imagem> imagens = imagemRepository.findBySilabaIdAndColorir(silabaId, tipoColorir);
 
         Collections.shuffle(imagens);
         List<Imagem> imagensLimitadas = imagens.stream().limit(quantImagens).collect(Collectors.toList());
@@ -159,13 +166,32 @@ public class ImagemService {
                         .collect(Collectors.toList());
             }
 
-            return new ImagemResponseDTO(
-                    img.getId(), img.getEstagio(), img.getEntidadeId(), img.getImagem(), img.getMascara(),
-                    img.getDescricao(), img.getColorir(), img.getFormato(),
-                    img.getCenaId(),
-                    fragmentosDTO // Pode ser null ou a lista de fragmentos
-            );
+            return montarResponseDTO(img, fragmentosDTO); // Pode ser null ou a lista de fragmentos
         }).collect(Collectors.toList());
+    }
+
+    // --- Métodos Auxiliares ---
+
+    private void aplicarEntidadeVinculada(Imagem imagem, Long silabaId, Long palavraId) {
+        if (silabaId == null && palavraId == null) {
+            throw new BadRequestException("A imagem precisa estar vinculada a uma sílaba, a uma palavra, ou às duas.");
+        }
+
+        if (silabaId != null) {
+            Silaba silaba = silabaRepository.findById(silabaId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Sílaba não encontrada com o ID: " + silabaId));
+            imagem.setSilaba(silaba);
+        } else {
+            imagem.setSilaba(null);
+        }
+
+        if (palavraId != null) {
+            Palavra palavra = palavraRepository.findById(palavraId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Palavra não encontrada com o ID: " + palavraId));
+            imagem.setPalavra(palavra);
+        } else {
+            imagem.setPalavra(null);
+        }
     }
 
     private ImagemResponseDTO converterParaDTO(Imagem imagem) {
@@ -177,10 +203,14 @@ public class ImagemService {
                 .map(frag -> new FragmentoResponseDTO(frag.getId(), frag.getCaminho()))
                 .collect(Collectors.toList());
 
+        return montarResponseDTO(imagem, fragmentosDTO);
+    }
+
+    private ImagemResponseDTO montarResponseDTO(Imagem imagem, List<FragmentoResponseDTO> fragmentosDTO) {
         return new ImagemResponseDTO(
                 imagem.getId(),
-                imagem.getEstagio(),
-                imagem.getEntidadeId(),
+                imagem.getSilaba() != null ? imagem.getSilaba().getId() : null,
+                imagem.getPalavra() != null ? imagem.getPalavra().getId() : null,
                 imagem.getImagem(),
                 imagem.getMascara(),
                 imagem.getDescricao(),

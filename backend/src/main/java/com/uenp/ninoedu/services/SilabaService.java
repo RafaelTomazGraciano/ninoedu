@@ -7,7 +7,6 @@ import com.uenp.ninoedu.model.dto.silaba.SilabaResumoDTO;
 import com.uenp.ninoedu.model.dto.vogal.VogalResponseDTO;
 import com.uenp.ninoedu.model.entity.Silaba;
 import com.uenp.ninoedu.model.entity.Vogal;
-import com.uenp.ninoedu.model.enums.Estagio;
 import com.uenp.ninoedu.repository.ImagemRepository;
 import com.uenp.ninoedu.repository.PalavraSilabaRepository;
 import com.uenp.ninoedu.repository.SilabaRepository;
@@ -119,10 +118,7 @@ public class SilabaService {
         }
 
         // Verificar se há imagens usando esta sílaba
-        long imagensCount = imagemRepository.countByEntidadeIdAndEstagioAndDeletadoFalse(
-                id,
-                Estagio.SILABA
-        );
+        long imagensCount = imagemRepository.countBySilabaIdAndDeletadoFalse(id);
         if (imagensCount > 0) {
             throw new BadRequestException(
                     "Não é possível deletar esta sílaba, pois ela está associada a " +

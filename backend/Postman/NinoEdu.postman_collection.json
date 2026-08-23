@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "ba44ba8d-8f75-4362-9072-f579fa39678a",
+    "_postman_id": "802295b9-4566-4a5f-b0e2-298040c4ee1d",
     "name": "NinoEdu",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "44627223",
-    "_collection_link": "https://go.postman.co/collection/44627223-ba44ba8d-8f75-4362-9072-f579fa39678a?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/44627223-802295b9-4566-4a5f-b0e2-298040c4ee1d?source=collection_link"
   },
   "item": [
     {
@@ -1418,6 +1418,11 @@
                 "exec": [
                   "pm.test(\"Imagem criada com sucesso\", function () {",
                   "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID da imagem criada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"imagem_id\", jsonData.id);",
                   "});"
                 ],
                 "type": "text/javascript",
@@ -1431,7 +1436,143 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"estagio\": \"SILABA\",\n    \"entidadeId\": {{silaba_id}},\n    \"imagem\": \"https://exemplo.com/bola-{{timestamp}}.png\",\n    \"descricao\": \"Imagem de bola\",\n    \"colorir\": \"NAO_COLORIR\",\n    \"formato\": \"FOTO\",\n    \"quantidadeAreaCerta\": 10,\n    \"quantidadeAreaErrada\": 6\n}",
+              "raw": "{\n    \"silabaId\": {{silaba_id}},\n    \"imagem\": \"https://exemplo.com/bola-{{timestamp}}.png\",\n    \"descricao\": \"Imagem de bola\",\n    \"colorir\": \"NAO_COLORIR\",\n    \"formato\": \"FOTO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/imagens",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10.1 Imagem - Criar (vinculada a Palavra)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem vinculada a palavra criada com sucesso\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID da imagem vinculada a palavra\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"imagem_palavra_id\", jsonData.id);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"palavraId\": {{palavra_id}},\n    \"imagem\": \"https://exemplo.com/palavra-{{timestamp}}.png\",\n    \"descricao\": \"Imagem de palavra\",\n    \"colorir\": \"NAO_COLORIR\",\n    \"formato\": \"FOTO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/imagens",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10.1 Imagem - Criar (vinculada a Sílaba e Palavra)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem com sílaba e palavra ao mesmo tempo é aceita\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar ID da imagem com sílaba e palavra\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"imagem_dupla_id\", jsonData.id);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"silabaId\": {{silaba_id}},\n    \"palavraId\": {{palavra_id}},\n    \"imagem\": \"https://exemplo.com/dupla-{{timestamp}}.png\",\n    \"descricao\": \"Imagem vinculada a sílaba e palavra\",\n    \"colorir\": \"NAO_COLORIR\",\n    \"formato\": \"FOTO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/imagens",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10.1 Imagem - Criar (sem sílaba ou palavra)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem sem sílaba nem palavra retorna 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"imagem\": \"https://exemplo.com/sem-ligacao-{{timestamp}}.png\",\n    \"descricao\": \"Imagem sem sílaba ou palavra\",\n    \"colorir\": \"NAO_COLORIR\",\n    \"formato\": \"FOTO\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1619,7 +1760,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"estagio\": \"SILABA\",\n    \"entidadeId\": {{silaba_id}},\n    \"imagem\": \"https://exemplo.com/bola-atualizada-{{timestamp}}.png\",\n    \"descricao\": \"Imagem de bola atualizada\",\n    \"colorir\": \"NAO_COLORIR\",\n    \"formato\": \"DESENHO\",\n    \"quantidadeAreaCerta\": 12,\n    \"quantidadeAreaErrada\": 4\n}",
+              "raw": "{\n    \"silabaId\": {{silaba_id}},\n    \"imagem\": \"https://exemplo.com/bola-atualizada-{{timestamp}}.png\",\n    \"descricao\": \"Imagem de bola atualizada\",\n    \"colorir\": \"NAO_COLORIR\",\n    \"formato\": \"DESENHO\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1788,10 +1929,270 @@
       ]
     },
     {
-      "name": "12 - Jogo",
+      "name": "12 - Cena",
       "item": [
         {
-          "name": "12.1 Jogo - Criar",
+          "name": "12.1 Cena - Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cena criada com sucesso\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Salvar ID da cena criada\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.environment.set(\"cena_id\", jsonData.id);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"entidadeId\": {{silaba_id}},\r\n    \"estagio\": \"SILABA\",\r\n    \"cena\": \"https://exemplo.com/cena-{{timestamp}}.png\",\r\n    \"quantidadeCertas\": 8,\r\n    \"quantidadeErradas\": 3\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cenas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cenas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "12.2 Cena - Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cena encontrada\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"ID corresponde\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    var cenaId = pm.environment.get(\"cena_id\");\r",
+                  "    pm.expect(jsonData.id).to.eql(parseInt(cenaId));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/cenas/{{cena_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cenas",
+                "{{cena_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "12.3 Cena - Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cena encontrada\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"ID corresponde\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    var cenaId = pm.environment.get(\"cena_id\");\r",
+                  "    pm.expect(jsonData.id).to.eql(parseInt(cenaId));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/cenas/{{cena_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cenas",
+                "{{cena_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "12.4 Cena - Listar Todas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cenas listadas\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Resposta é uma lista (não paginada)\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.be.an(\"array\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/cenas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cenas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "12.5 Cena - Atualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cena atualizada\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"entidadeId\": {{silaba_id}},\r\n    \"estagio\": \"SILABA\",\r\n    \"cena\": \"https://exemplo.com/cena-atualizada-{{timestamp}}.png\",\r\n    \"quantidadeCertas\": 10,\r\n    \"quantidadeErradas\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cenas/{{cena_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cenas",
+                "{{cena_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "12.6 - Imagem - Criar (vinculada a Cena)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem vinculada à cena criada com sucesso\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Salvar ID da imagem vinculada à cena\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.environment.set(\"imagem_vinculada_cena_id\", jsonData.id);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"silabaId\": {{silaba_id}},\r\n    \"imagem\": \"https://exemplo.com/imagem-cena-{{timestamp}}.png\",\r\n    \"descricao\": \"Imagem vinculada a uma cena\",\r\n    \"colorir\": \"NAO_COLORIR\",\r\n    \"formato\": \"FOTO\",\r\n    \"cenaId\": {{cena_id}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/imagens",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "13 - Jogo",
+      "item": [
+        {
+          "name": "13.1 Jogo - Criar",
           "event": [
             {
               "listen": "test",
@@ -1833,7 +2234,7 @@
           "response": []
         },
         {
-          "name": "12.2 Jogo - Listar",
+          "name": "13.2 Jogo - Listar",
           "event": [
             {
               "listen": "test",
@@ -1888,7 +2289,7 @@
           "response": []
         },
         {
-          "name": "12.3 Jogo - Buscar por ID",
+          "name": "13.3 Jogo - Buscar por ID",
           "event": [
             {
               "listen": "test",
@@ -1930,7 +2331,7 @@
           "response": []
         },
         {
-          "name": "12.4 Jogo - Atualizar",
+          "name": "13.4 Jogo - Atualizar",
           "event": [
             {
               "listen": "test",
@@ -1975,10 +2376,10 @@
       ]
     },
     {
-      "name": "13 - Favorito",
+      "name": "14 - Favorito",
       "item": [
         {
-          "name": "13.1 Favorito - Criar",
+          "name": "14.1 Favorito - Criar",
           "event": [
             {
               "listen": "test",
@@ -2025,7 +2426,7 @@
           "response": []
         },
         {
-          "name": "13.2 Aluno - Listar Favoritos",
+          "name": "14.2 Aluno - Listar Favoritos",
           "event": [
             {
               "listen": "test",
@@ -2066,10 +2467,10 @@
       ]
     },
     {
-      "name": "14 - Historico",
+      "name": "15 - Historico",
       "item": [
         {
-          "name": "14.1 Historico - Criar",
+          "name": "15.1 Historico - Criar",
           "event": [
             {
               "listen": "test",
@@ -2111,7 +2512,7 @@
           "response": []
         },
         {
-          "name": "14.2 Aluno - Listar Histórico",
+          "name": "15.2 Aluno - Listar Histórico",
           "event": [
             {
               "listen": "test",
@@ -2152,10 +2553,10 @@
       ]
     },
     {
-      "name": "15 - Recursos",
+      "name": "16 - Recursos",
       "item": [
         {
-          "name": "15.1 Recurso - Buscar Sílabas para Jogo",
+          "name": "16.1 Recurso - Buscar Sílabas para Jogo",
           "event": [
             {
               "listen": "test",
@@ -2234,7 +2635,7 @@
           "response": []
         },
         {
-          "name": "15.2 Recurso - Buscar Palavras para Jogo",
+          "name": "16.2 Recurso - Buscar Palavras para Jogo",
           "event": [
             {
               "listen": "test",
@@ -2314,10 +2715,10 @@
       ]
     },
     {
-      "name": "16 - Validações",
+      "name": "17 - Validações",
       "item": [
         {
-          "name": "16.1 - Professor com Aluno",
+          "name": "17.1 - Professor com Aluno",
           "event": [
             {
               "listen": "test",
@@ -2351,7 +2752,7 @@
           "response": []
         },
         {
-          "name": "16.2 - Sílaba com Palavra",
+          "name": "17.2 - Sílaba com Palavra",
           "event": [
             {
               "listen": "test",
@@ -2385,7 +2786,7 @@
           "response": []
         },
         {
-          "name": "16.3 - Imagem com Fragmento",
+          "name": "17.3 - Imagem com Fragmento",
           "event": [
             {
               "listen": "test",
@@ -2417,14 +2818,48 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "17.4 - Cena com Imagem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Não é possível deletar cena vinculada a imagem\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/cenas/{{cena_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cenas",
+                "{{cena_id}}"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
     {
-      "name": "17 - Security",
+      "name": "18 - Security",
       "item": [
         {
-          "name": "17.1 Security - Criar Instituição Comum",
+          "name": "18.1 Security - Criar Instituição Comum",
           "event": [
             {
               "listen": "test",
@@ -2486,7 +2921,7 @@
           "response": []
         },
         {
-          "name": "17.2 Security - Login Usuário Comum",
+          "name": "18.2 Security - Login Usuário Comum",
           "event": [
             {
               "listen": "test",
@@ -2545,7 +2980,7 @@
           "response": []
         },
         {
-          "name": "17.3 Security - Usuário Comum NÃO pode criar Herói",
+          "name": "18.3 Security - Usuário Comum NÃO pode criar Herói",
           "event": [
             {
               "listen": "test",
@@ -2597,7 +3032,7 @@
           "response": []
         },
         {
-          "name": "17.4 Security - Usuário Comum NÃO pode criar Sílaba",
+          "name": "18.4 Security - Usuário Comum NÃO pode criar Sílaba",
           "event": [
             {
               "listen": "test",
@@ -2649,7 +3084,7 @@
           "response": []
         },
         {
-          "name": "17.5 Security - Usuário Comum NÃO pode criar Jogo",
+          "name": "18.5 Security - Usuário Comum NÃO pode criar Jogo",
           "event": [
             {
               "listen": "test",
@@ -2701,7 +3136,7 @@
           "response": []
         },
         {
-          "name": "17.6 Security - Usuário Comum NÃO pode deletar Herói",
+          "name": "18.6 Security - Usuário Comum NÃO pode deletar Herói",
           "event": [
             {
               "listen": "test",
@@ -2745,7 +3180,7 @@
           "response": []
         },
         {
-          "name": "17.7 Security - Usuário Comum NÃO pode trocar senha",
+          "name": "18.7 Security - Usuário Comum NÃO pode trocar senha",
           "event": [
             {
               "listen": "test",
@@ -2799,7 +3234,7 @@
           "response": []
         },
         {
-          "name": "17.8 Security - Usuário Comum PODE criar Professor",
+          "name": "18.8 Security - Usuário Comum PODE criar Professor",
           "event": [
             {
               "listen": "test",
@@ -2856,7 +3291,7 @@
           "response": []
         },
         {
-          "name": "17.9 Security - Usuário Comum PODE listar Vogais",
+          "name": "18.9 Security - Usuário Comum PODE listar Vogais",
           "event": [
             {
               "listen": "test",
@@ -2904,7 +3339,7 @@
           "response": []
         },
         {
-          "name": "17.10 Security - Usuário Comum PODE buscar recursos",
+          "name": "18.10 Security - Usuário Comum PODE buscar recursos",
           "event": [
             {
               "listen": "test",
@@ -2971,7 +3406,7 @@
           "response": []
         },
         {
-          "name": "17.11 Security - Endpoint sem token",
+          "name": "18.11 Security - Endpoint sem token",
           "event": [
             {
               "listen": "test",
@@ -3008,7 +3443,7 @@
           "response": []
         },
         {
-          "name": "17.12 Security - Token inválido",
+          "name": "18.12 Security - Token inválido",
           "event": [
             {
               "listen": "test",
@@ -3030,7 +3465,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "token_invalido_fake_123",
+                  "value": "{{auth_secret_1ac6}}",
                   "type": "string"
                 }
               ]
@@ -3054,10 +3489,10 @@
       ]
     },
     {
-      "name": "18 - Cleanup",
+      "name": "19 - Cleanup",
       "item": [
         {
-          "name": "18.1 - Deletar Professor Comum",
+          "name": "19.1 - Deletar Professor Comum",
           "event": [
             {
               "listen": "test",
@@ -3091,7 +3526,7 @@
           "response": []
         },
         {
-          "name": "18.2 - Deletar Favorito",
+          "name": "19.2 - Deletar Favorito",
           "event": [
             {
               "listen": "test",
@@ -3125,7 +3560,7 @@
           "response": []
         },
         {
-          "name": "18.3 - Deletar Fragmento",
+          "name": "19.3 - Deletar Fragmento",
           "event": [
             {
               "listen": "test",
@@ -3159,15 +3594,15 @@
           "response": []
         },
         {
-          "name": "18.4 - Deletar Imagem",
+          "name": "19.4 - Deletar Imagem",
           "event": [
             {
               "listen": "test",
               "script": {
                 "exec": [
                   "pm.test(\"Imagem deletada\", function () {",
-                  "           pm.response.to.have.status(204);",
-                  "       });"
+                  "    pm.response.to.have.status(204);",
+                  "});"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -3193,7 +3628,109 @@
           "response": []
         },
         {
-          "name": "18.5 - Deletar Jogo",
+          "name": "19.4a - Deletar Imagem (ligado a palavra)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem deletada\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/imagens/{{imagem_palavra_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens",
+                "{{imagem_palavra_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "19.4b - Deletar Imagem (ligado a silaba&palavra)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Imagem deletada\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/imagens/{{imagem_dupla_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens",
+                "{{imagem_dupla_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "19.4c - Deletar Imagem Vinculada à Cena",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Deletar Imagem Vinculada à Cena\", function () {\r",
+                  "    pm.response.to.have.status(204);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/imagens/{{imagem_vinculada_cena_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "imagens",
+                "{{imagem_vinculada_cena_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "19.5 - Deletar Jogo",
           "event": [
             {
               "listen": "test",
@@ -3227,7 +3764,7 @@
           "response": []
         },
         {
-          "name": "18.6 - Deletar Palavra",
+          "name": "19.6 - Deletar Palavra",
           "event": [
             {
               "listen": "test",
@@ -3261,7 +3798,7 @@
           "response": []
         },
         {
-          "name": "18.7 - Deletar Sílaba",
+          "name": "19.7 - Deletar Sílaba",
           "event": [
             {
               "listen": "test",
@@ -3295,7 +3832,7 @@
           "response": []
         },
         {
-          "name": "18.8 - Deletar Aluno",
+          "name": "19.8 - Deletar Aluno",
           "event": [
             {
               "listen": "test",
@@ -3329,7 +3866,7 @@
           "response": []
         },
         {
-          "name": "18.9 - Deletar Professor",
+          "name": "19.9 - Deletar Professor",
           "event": [
             {
               "listen": "test",
@@ -3363,7 +3900,7 @@
           "response": []
         },
         {
-          "name": "18.10 - Deletar Herói",
+          "name": "19.10 - Deletar Herói",
           "event": [
             {
               "listen": "test",
@@ -3411,7 +3948,7 @@
           "response": []
         },
         {
-          "name": "18.11 - Deletar Instituição Comum",
+          "name": "19.11 - Deletar Instituição Comum",
           "event": [
             {
               "listen": "test",
@@ -3445,7 +3982,7 @@
           "response": []
         },
         {
-          "name": "18.12 - Deletar Instituição Teste",
+          "name": "19.12 - Deletar Instituição Teste",
           "event": [
             {
               "listen": "test",
@@ -3473,6 +4010,40 @@
                 "api",
                 "instituicoes",
                 "{{testInstituicaoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "19.13 - Deletar Cena",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Deletar Cena\", function () {\r",
+                  "    pm.response.to.have.status(204);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/cenas/{{cena_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cenas",
+                "{{cena_id}}"
               ]
             }
           },
@@ -3535,6 +4106,12 @@
           ""
         ]
       }
+    }
+  ],
+  "variable": [
+    {
+      "key": "auth_secret_1ac6",
+      "secret": true
     }
   ]
 }

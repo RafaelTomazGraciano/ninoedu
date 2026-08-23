@@ -9,7 +9,6 @@ import com.uenp.ninoedu.model.dto.silaba.SilabaResponseDTO;
 import com.uenp.ninoedu.model.entity.Palavra;
 import com.uenp.ninoedu.model.entity.PalavraSilaba;
 import com.uenp.ninoedu.model.entity.Silaba;
-import com.uenp.ninoedu.model.enums.Estagio;
 import com.uenp.ninoedu.repository.ImagemRepository;
 import com.uenp.ninoedu.repository.PalavraRepository;
 import com.uenp.ninoedu.repository.PalavraSilabaRepository;
@@ -115,7 +114,7 @@ public class PalavraService {
             throw new ResourceNotFoundException("Palavra não encontrada com o ID: " + id);
         }
 
-        long imagensCount = imagemRepository.countByEntidadeIdAndEstagioAndDeletadoFalse(id, Estagio.PALAVRA);
+        long imagensCount = imagemRepository.countByPalavraIdAndDeletadoFalse(id);
         if (imagensCount > 0) {
             throw new BadRequestException(
                     "Não é possível deletar esta palavra, pois ela está associada a " +

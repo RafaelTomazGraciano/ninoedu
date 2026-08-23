@@ -66,7 +66,6 @@ public class CenaService {
     public void deletar(Long id) {
         Cena cena = buscarCena(id);
 
-        // Validação: Impede a exclusão se houver imagens atreladas a esta cena
         if (imagemRepository.existsByCenaId(id)) {
             throw new BadRequestException(
                     "Não é possível deletar esta cena, pois existem imagens vinculadas a ela."
@@ -75,8 +74,6 @@ public class CenaService {
 
         cenaRepository.delete(cena);
     }
-
-    // --- Métodos Auxiliares ---
 
     private Cena buscarCena(Long id) {
         return cenaRepository.findById(id)

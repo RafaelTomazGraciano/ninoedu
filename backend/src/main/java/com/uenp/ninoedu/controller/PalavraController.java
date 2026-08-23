@@ -32,9 +32,9 @@ public class PalavraController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> criarPalavra(@Valid @RequestBody PalavraRequestDTO dto) {
-        palavraService.criarPalavra(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<PalavraResponseDTO> criarPalavra(@Valid @RequestBody PalavraRequestDTO dto) {
+        PalavraResponseDTO response = palavraService.criarPalavra(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
@@ -43,9 +43,9 @@ public class PalavraController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarPalavra(@PathVariable Long id, @Valid @RequestBody PalavraRequestDTO dto) {
-        palavraService.atualizarPalavra(id, dto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PalavraResponseDTO> atualizarPalavra(@PathVariable Long id, @Valid @RequestBody PalavraRequestDTO dto) {
+        PalavraResponseDTO response = palavraService.atualizarPalavra(id, dto);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")

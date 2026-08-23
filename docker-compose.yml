@@ -4,12 +4,21 @@ services:
     image: postgres:16-alpine
     container_name: ninoedu-postgres
     restart: unless-stopped
+    env_file:
+      - backend/.env
     environment:
-      POSTGRES_DB: NinoEdu
-      POSTGRES_USER: ninoedu
-      POSTGRES_PASSWORD: "ninoedu123"
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - ninoedu-network
 
@@ -19,12 +28,12 @@ services:
     container_name: ninoedu-backend
     restart: unless-stopped
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    env_file:
+      - backend/.env
     environment:
-      DB_URL: jdbc:postgresql://ninoedu-postgres:5432/NinoEdu
-      DB_USERNAME: ninoedu
-      DB_PASSWORD: "ninoedu123"
-      JWT_SECRET: "ninoedu-jwt-secret-local"
+      DB_HOST: postgres
     ports:
       - "8080:8080"
     networks:
